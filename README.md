@@ -52,7 +52,7 @@ ENA, ENB: PWM Speed Control
 Power: 외부 전원 공급 장치를 통한 모터 전원 분리
 
 ![BlockDiagram](images/Project3_Automobility_BlockDiagram.png)
-
+![alt text](images/Project3_Automobility_Statemachine.png)
 
 🏁 시작하기 (Getting Started)
 이 저장소를 클론합니다.
