@@ -2,7 +2,7 @@
 ![title](images/title.jpg)
 
 
-# :car:  Project 3 <span style = "color : #8c04e7"> AutoMobility </span>
+# :car:  Project 3 AutoMobility
 
 ## **1. Project Summary (프로젝트 요약)**
 STM32(MCU)를 활용하여 블루투스를 통한 수동조종(Manual) 및 자율주행(Auto) 시스템 제작
@@ -73,11 +73,11 @@ Project3_AutoMobility/
 ```
 
 
-### 4.1 Hardware BlockDiagram (하드웨어 블록다이어그램)
+### 4.2 Hardware BlockDiagram (하드웨어 블록다이어그램)
 
 ![BlockDiagram](images/Project3_Automobility_BlockDiagram.png)
 
-### 4.2 State Machine (상태 머신)
+### 4.3 State Machine (상태 머신)
 
 ![alt text](images/Project3_Automobility_Statemachine.png)
 
@@ -110,26 +110,76 @@ Project3_AutoMobility/
 ## 6. Troubleshooting (문제 해결 기록)
 
 <details>
-<summary> <b>📍 초음파 센서 데이터가 튐 (Outlier) </b></summary>
+<summary> <b> 초음파 센서 데이터가 튐 (Outlier) </b></summary>
 
 <br>
 
-🔍  Issue (문제 상황)
+🔍  **Issue (문제 상황)**
+
 자율 주행 모드 주행 중, 전방에 장애물이 없음에도 불구하고 차량이 회피할려고 회전함
 
-❓ Analysis (원인 분석)
-STM32 디버깅 툴을 통해 3개의 초음파 센서의 데이터를 검사한 결과 **200cm**가 넘는 값이 
+❓ **Analysis (원인 분석)**
+
+STM32 디버깅 툴을 통해 3개의 초음파 센서의 데이터를 검사한 결과 **200cm**가 넘는 값이 일시적으로 감지됨을 인지
 
 이러한 급격한 데이터 변화가 자율 주행 로직의 판단 임계치를 순간적으로 넘기면서 시스템 오작동을 유발함.
 
-❗ Action (해결 방법)
-이동 평균 필터(Moving Average Filter) 적용: ultrasonic.c 소스 파일 내에 최근 측정된 5개의 데이터를 저장하는 버퍼를 생성하고, 해당 데이터들의 평균값을 최종 거리값으로 사용하도록 로직 변경.
+❗ **Action (해결 방법)**
 
-급격한 변화율 제한: 이전 측정값과 현재 측정값의 차이가 허용 범위를 초과할 경우, 해당 데이터를 노이즈로 간주하고 무시하는 예외 처리 로직 추가.
+지나치게 먼거리라 판단하면 최대거리 **100cm**으로 고정시킴
 
-✅ Result (결과)
-센서 데이터의 변동 폭이 완만해지며 데이터 신뢰도가 크게 향상됨.
+✅ **Result (결과)**
 
-불필요한 급제동 현상이 해결되어 부드럽고 안정적인 장애물 회피 주행 기능을 구현함.
+센서 데이터의 값이 오버해서 차량이 오작동하는 일이 없어짐
 
 </details>
+
+
+<details>
+<summary> <b> 장애물 회피 시 방향 결정 알고리즘의 불안정성 (Left-Right Misjudgment) </b></summary>
+
+<br>
+
+🔍  **Issue (문제 상황)**
+
+자율 주행 모드 주행 중, 우회전해야하는 상황에서 좌회전을 하는 등 오판을 함
+
+❓ **Analysis (원인 분석)**
+
+정면 거리 측정 후 좌우 공간을 순차적으로 판단하는 우선순위 기반 로직의 특성상, 공간이 급격히 좁아지는 **코너 구석(Corner Nook)** 진입 시 측면 데이터를 충분히 반영하지 못하는 오판 현상이 발생함.
+
+❗ **Action (해결 방법)**
+
+왼쪽 중앙 오른쪽 모든 센서의 거리중에서 가장 짧은 거리를 선별하여 그 쪽을 우선하여 회피하도록 로직을 수정
+
+✅ **Result (결과)**
+
+좌우판단을 더 이상 오판하지 않음
+</details>
+
+<details>
+<summary> <b> 넓은 코너에 진입하면 갇힘 (Get trapped in Wide Corner) </b></summary>
+
+<br>
+
+🔍  **Issue (문제 상황)**
+
+좌우가 넓은 코너에 코너 안쪽으로 비스듬하게 진입시 회전 판단을 미리 못하여 벽에 부딛힘
+
+❓ **Analysis (원인 분석)**
+
+코너의 폭이 넓기 때문에 측면 센서가 인식하기에 거리가 너무 멀어서 정작 정면 센서쪽이 한계거리에 도달해도 회피판단을 못함
+
+❗ **Action (해결 방법)**
+
+Crash_Distance란 변수를 추가하여 정면센서가 이 거리에 도달하면 강제 후진 로직을 최우선으로 올림
+후진이후 강제로 회전하면서 좌우 센서값을 강제로 갱신시킴
+이후 회피판단로직 실행
+
+✅ **Result (결과)**
+
+넓은 코너에서 더 이상 갇히는 일이 없어짐
+
+</details>
+
+
