@@ -39,7 +39,6 @@
 //#include "ledbar.h"
 #include "ultrasonic.h"
 #include "statemachine.h"
-#include "ina219.h"
 
 
 
@@ -182,36 +181,7 @@ int main(void)
   HAL_TIM_Base_Start(&htim11);                  // for delay_us function
 
 
-//  Car_Move(CAR_FRONT, SPD_100);
-//
-//
-//
-//  		for (int var = 0; var < 20; var++)
-//  		{
-//  			v_bus = INA219_ReadBusVoltage(&hi2c3);
-//  			i_ma = INA219_ReadCurrent(&hi2c3);
-//  			spd_100_v[var] = v_bus;
-//  			spd_100_i[var] = i_ma;
-//
-//  			HAL_Delay(1000);
-//  		}
-//  	Car_Stop();
 
-
-//  	Car_Move(CAR_FRONT, SPD_60);
-//
-//
-//
-//  	  		for (int var = 0; var <= 20; var++)
-//  	  		{
-//  	  			v_bus = INA219_ReadBusVoltage(&hi2c3);
-//  	  			i_ma = INA219_ReadCurrent(&hi2c3);
-//  	  			spd_60_v[var] = v_bus;
-//  	  			spd_60_i[var] = i_ma;
-//
-//  	  			HAL_Delay(1000);
-//  	  		}
-//  	  	Car_Stop();
 
   /* USER CODE END 2 */
 
@@ -228,7 +198,6 @@ int main(void)
 
 
 
-//	  SHOW_UART2();
 
 	  ST_MACHINE();
 
