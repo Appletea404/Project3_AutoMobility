@@ -100,7 +100,9 @@ Project3_AutoMobility/
 
 ### 5.2  Demonstration (시연 영상)
 
-
+<a href="https://youtube.com/playlist?list=PL6xfXHA4BYR_6b3oBZIrsHkHDf97zLFjA&si=EPpmTzlfJeoMHaCG" target="_blank">
+  <img src="images/youtube.jpg" alt="Watch Demo Video" width="300" />
+</a>
 
 *이미지를 클릭하면 시연 영상(유튜브)로 이동합니다.*
 
