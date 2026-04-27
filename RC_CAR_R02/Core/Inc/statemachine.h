@@ -10,7 +10,7 @@
 
 #include "stdio.h"
 #include "stm32f4xx_hal.h"
-#include "ledbar.h"
+//#include "ledbar.h"
 #include "speed.h"
 #include "direction.h"
 #include "car.h"

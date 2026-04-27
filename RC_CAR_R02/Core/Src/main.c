@@ -202,7 +202,7 @@ int main(void)
 	  ST_MACHINE();
 
 
-
+	  SHOW_UART2();
 
 
 
